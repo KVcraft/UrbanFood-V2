@@ -27,7 +27,15 @@ public class SupplierService {
 
     @PostConstruct
     public void init() {
-        createSupplierCall = new SimpleJdbcCall(jdbcTemplate).withProcedureName("CREATE_SUPPLIER_PROC");
+        createSupplierCall = new SimpleJdbcCall(jdbcTemplate)
+                .withProcedureName("CREATE_SUPPLIER_PROC")
+                .declareParameters(
+                        new SqlParameter("p_supplier_id", Types.VARCHAR),
+                        new SqlParameter("p_name", Types.VARCHAR),
+                        new SqlParameter("p_contact", Types.VARCHAR),
+                        new SqlParameter("p_email", Types.VARCHAR),
+                        new SqlParameter("p_address", Types.VARCHAR)
+                );
 
         getAllSuppliersCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("GET_ALL_SUPPLIERS_PROC")
@@ -38,10 +46,13 @@ public class SupplierService {
                 .declareParameters(new SqlParameter("p_supplier_id", Types.VARCHAR))
                 .returningResultSet("o_cursor", (rs, rowNum) -> mapSupplier(rs));
 
-        updateSupplierCall = new SimpleJdbcCall(jdbcTemplate).withProcedureName("UPDATE_SUPPLIER_PROC");
+        updateSupplierCall = new SimpleJdbcCall(jdbcTemplate)
+                .withProcedureName("UPDATE_SUPPLIER_PROC");
 
-        deleteSupplierCall = new SimpleJdbcCall(jdbcTemplate).withProcedureName("DELETE_SUPPLIER_PROC");
+        deleteSupplierCall = new SimpleJdbcCall(jdbcTemplate)
+                .withProcedureName("DELETE_SUPPLIER_PROC");
     }
+
 
     private Supplier mapSupplier(ResultSet rs) throws SQLException {
         Supplier supplier = new Supplier();
@@ -55,12 +66,14 @@ public class SupplierService {
 
     public void createSupplier(Supplier supplier) {
         Map<String, Object> params = new HashMap<>();
+        params.put("p_supplier_id", supplier.getSupplierId()); // ADD THIS LINE to manually pass ID
         params.put("p_name", supplier.getSupplierName());
         params.put("p_contact", supplier.getSupplierContact());
         params.put("p_email", supplier.getSupplierEmail());
         params.put("p_address", supplier.getSupplierAddress());
         createSupplierCall.execute(params);
     }
+
 
     public List<Supplier> getAllSuppliers() {
         Map<String, Object> result = getAllSuppliersCall.execute(new HashMap<>());
