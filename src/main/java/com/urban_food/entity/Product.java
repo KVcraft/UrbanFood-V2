@@ -9,23 +9,23 @@ public class Product {
     private String description;
     private BigDecimal price;
     private int stockQty;
+    private String category;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Constructors, Getters & Setters
+    public Product() {
+    }
 
-    public Product(String productId, String name, String description, BigDecimal price, int stockQty, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Product(String productId, String name, String description, BigDecimal price, int stockQty, String category,
+                   LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.productId = productId;
         this.name = name;
         this.description = description;
         this.price = price;
         this.stockQty = stockQty;
+        this.category = category;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-    }
-
-    public Product() {
-
     }
 
     public String getProductId() {
@@ -66,6 +66,14 @@ public class Product {
 
     public void setStockQty(int stockQty) {
         this.stockQty = stockQty;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public LocalDateTime getCreatedAt() {

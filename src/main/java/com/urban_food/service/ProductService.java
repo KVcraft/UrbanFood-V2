@@ -13,7 +13,6 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.*;
 
-
 @Service
 public class ProductService {
 
@@ -29,7 +28,14 @@ public class ProductService {
     @PostConstruct
     public void init() {
         createProductCall = new SimpleJdbcCall(jdbcTemplate)
-                .withProcedureName("CREATE_PRODUCT_PROC");
+                .withProcedureName("CREATE_PRODUCT_PROC")
+                .declareParameters(
+                        new SqlParameter("p_name", Types.VARCHAR),
+                        new SqlParameter("p_description", Types.VARCHAR),
+                        new SqlParameter("p_price", Types.NUMERIC),
+                        new SqlParameter("p_stock_qty", Types.INTEGER),
+                        new SqlParameter("p_category", Types.VARCHAR)
+                );
 
         getAllProductsCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("GET_ALL_PRODUCTS_PROC")
@@ -41,13 +47,21 @@ public class ProductService {
                 .returningResultSet("o_cursor", (rs, rowNum) -> mapProduct(rs));
 
         updateProductCall = new SimpleJdbcCall(jdbcTemplate)
-                .withProcedureName("UPDATE_PRODUCT_PROC");
+                .withProcedureName("UPDATE_PRODUCT_PROC")
+                .declareParameters(
+                        new SqlParameter("p_product_id", Types.VARCHAR),
+                        new SqlParameter("p_name", Types.VARCHAR),
+                        new SqlParameter("p_description", Types.VARCHAR),
+                        new SqlParameter("p_price", Types.NUMERIC),
+                        new SqlParameter("p_stock_qty", Types.INTEGER),
+                        new SqlParameter("p_category", Types.VARCHAR)
+                );
 
         deleteProductCall = new SimpleJdbcCall(jdbcTemplate)
-                .withProcedureName("DELETE_PRODUCT_PROC");
+                .withProcedureName("DELETE_PRODUCT_PROC")
+                .declareParameters(new SqlParameter("p_product_id", Types.VARCHAR));
     }
 
-    // Row mapper
     private Product mapProduct(ResultSet rs) throws SQLException {
         Product product = new Product();
         product.setProductId(rs.getString("product_id"));
@@ -55,6 +69,7 @@ public class ProductService {
         product.setDescription(rs.getString("description"));
         product.setPrice(rs.getBigDecimal("price"));
         product.setStockQty(rs.getInt("stock_qty"));
+        product.setCategory(rs.getString("category"));
         product.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         product.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
         return product;
@@ -62,11 +77,11 @@ public class ProductService {
 
     public void createProduct(Product product) {
         Map<String, Object> params = new HashMap<>();
-        params.put("p_product_id", product.getProductId());
         params.put("p_name", product.getName());
         params.put("p_description", product.getDescription());
         params.put("p_price", product.getPrice());
         params.put("p_stock_qty", product.getStockQty());
+        params.put("p_category", product.getCategory());
         createProductCall.execute(params);
     }
 
@@ -88,6 +103,7 @@ public class ProductService {
         params.put("p_description", product.getDescription());
         params.put("p_price", product.getPrice());
         params.put("p_stock_qty", product.getStockQty());
+        params.put("p_category", product.getCategory());
         updateProductCall.execute(params);
     }
 

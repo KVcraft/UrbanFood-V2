@@ -1,10 +1,10 @@
 package com.urban_food.controller;
 
 import com.urban_food.entity.Product;
+import com.urban_food.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.urban_food.service.ProductService;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable String id, @RequestBody Product product) {
-        product.setProductId(id);
+        product.setProductId(id); // Set ID from path
         productService.updateProduct(product);
         return ResponseEntity.ok().build();
     }
@@ -46,4 +46,3 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 }
-
