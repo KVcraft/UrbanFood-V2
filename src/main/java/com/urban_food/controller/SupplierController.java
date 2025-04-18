@@ -36,13 +36,21 @@ public class SupplierController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable String id, @RequestBody Supplier supplier) {
         supplier.setSupplierId(id);
-        supplierService.updateSupplier(supplier);
-        return ResponseEntity.ok().build();
+        try {
+            supplierService.updateSupplier(supplier);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null);  // Handle exception when ID doesn't exist
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
-        supplierService.deleteSupplier(id);
-        return ResponseEntity.noContent().build();
+        try {
+            supplierService.deleteSupplier(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null);  // Handle exception when ID doesn't exist
+        }
     }
 }

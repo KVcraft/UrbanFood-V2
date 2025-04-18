@@ -55,7 +55,6 @@ public class SupplierService {
 
     public void createSupplier(Supplier supplier) {
         Map<String, Object> params = new HashMap<>();
-        params.put("p_supplier_id", supplier.getSupplierId());
         params.put("p_name", supplier.getSupplierName());
         params.put("p_contact", supplier.getSupplierContact());
         params.put("p_email", supplier.getSupplierEmail());
@@ -75,8 +74,14 @@ public class SupplierService {
     }
 
     public void updateSupplier(Supplier supplier) {
+        // Check if the supplier ID exists in the database
+        Optional<Supplier> existingSupplier = getSupplierById(supplier.getSupplierId());
+        if (!existingSupplier.isPresent()) {
+            throw new RuntimeException("Supplier ID does not exist. Update failed.");
+        }
+
         Map<String, Object> params = new HashMap<>();
-        params.put("p_supplier_id", supplier.getSupplierId());
+        params.put("p_supplier_id", supplier.getSupplierId());  // Ensure primary key cannot be updated
         params.put("p_name", supplier.getSupplierName());
         params.put("p_contact", supplier.getSupplierContact());
         params.put("p_email", supplier.getSupplierEmail());
@@ -85,6 +90,12 @@ public class SupplierService {
     }
 
     public void deleteSupplier(String id) {
+        // Check if the supplier ID exists in the database
+        Optional<Supplier> existingSupplier = getSupplierById(id);
+        if (!existingSupplier.isPresent()) {
+            throw new RuntimeException("Supplier ID does not exist. Deletion failed.");
+        }
+
         deleteSupplierCall.execute(Collections.singletonMap("p_supplier_id", id));
     }
 }
