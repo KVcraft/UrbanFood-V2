@@ -30,10 +30,10 @@ public class ProductService {
         createProductCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("CREATE_PRODUCT_PROC")
                 .declareParameters(
-                        new SqlParameter("p_name", Types.VARCHAR),
-                        new SqlParameter("p_description", Types.VARCHAR),
-                        new SqlParameter("p_price", Types.NUMERIC),
-                        new SqlParameter("p_stock_qty", Types.INTEGER),
+                        new SqlParameter("p_productName", Types.VARCHAR),
+                        new SqlParameter("p_productDescription", Types.VARCHAR),
+                        new SqlParameter("p_productPrice", Types.NUMERIC),
+                        new SqlParameter("p_stockQuantity", Types.INTEGER),
                         new SqlParameter("p_category", Types.VARCHAR)
                 );
 
@@ -43,44 +43,42 @@ public class ProductService {
 
         getProductByIdCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("GET_PRODUCT_BY_ID_PROC")
-                .declareParameters(new SqlParameter("p_product_id", Types.VARCHAR))
+                .declareParameters(new SqlParameter("p_productId", Types.VARCHAR))
                 .returningResultSet("o_cursor", (rs, rowNum) -> mapProduct(rs));
 
         updateProductCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("UPDATE_PRODUCT_PROC")
                 .declareParameters(
-                        new SqlParameter("p_product_id", Types.VARCHAR),
-                        new SqlParameter("p_name", Types.VARCHAR),
-                        new SqlParameter("p_description", Types.VARCHAR),
-                        new SqlParameter("p_price", Types.NUMERIC),
-                        new SqlParameter("p_stock_qty", Types.INTEGER),
+                        new SqlParameter("p_productId", Types.VARCHAR),
+                        new SqlParameter("p_productName", Types.VARCHAR),
+                        new SqlParameter("p_productDescription", Types.VARCHAR),
+                        new SqlParameter("p_productPrice", Types.NUMERIC),
+                        new SqlParameter("p_stockQuantity", Types.INTEGER),
                         new SqlParameter("p_category", Types.VARCHAR)
                 );
 
         deleteProductCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("DELETE_PRODUCT_PROC")
-                .declareParameters(new SqlParameter("p_product_id", Types.VARCHAR));
+                .declareParameters(new SqlParameter("p_productId", Types.VARCHAR));
     }
 
     private Product mapProduct(ResultSet rs) throws SQLException {
         Product product = new Product();
-        product.setProductId(rs.getString("product_id"));
-        product.setName(rs.getString("name"));
-        product.setDescription(rs.getString("description"));
-        product.setPrice(rs.getBigDecimal("price"));
-        product.setStockQty(rs.getInt("stock_qty"));
+        product.setProductId(rs.getString("productId"));
+        product.setProductName(rs.getString("productName"));
+        product.setProductDescription(rs.getString("productDescription"));
+        product.setProductPrice(rs.getBigDecimal("productPrice"));
+        product.setStockQuantity(rs.getInt("stockQuantity"));
         product.setCategory(rs.getString("category"));
-        product.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        product.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
         return product;
     }
 
     public void createProduct(Product product) {
         Map<String, Object> params = new HashMap<>();
-        params.put("p_name", product.getName());
-        params.put("p_description", product.getDescription());
-        params.put("p_price", product.getPrice());
-        params.put("p_stock_qty", product.getStockQty());
+        params.put("p_productName", product.getProductName());
+        params.put("p_productDescription", product.getProductDescription());
+        params.put("p_productPrice", product.getProductPrice());
+        params.put("p_stockQuantity", product.getStockQuantity());
         params.put("p_category", product.getCategory());
         createProductCall.execute(params);
     }
@@ -91,23 +89,23 @@ public class ProductService {
     }
 
     public Optional<Product> getProductById(String productId) {
-        Map<String, Object> result = getProductByIdCall.execute(Collections.singletonMap("p_product_id", productId));
+        Map<String, Object> result = getProductByIdCall.execute(Collections.singletonMap("p_productId", productId));
         List<Product> list = (List<Product>) result.get("o_cursor");
         return list.isEmpty() ? Optional.empty() : Optional.of(list.get(0));
     }
 
     public void updateProduct(Product product) {
         Map<String, Object> params = new HashMap<>();
-        params.put("p_product_id", product.getProductId());
-        params.put("p_name", product.getName());
-        params.put("p_description", product.getDescription());
-        params.put("p_price", product.getPrice());
-        params.put("p_stock_qty", product.getStockQty());
+        params.put("p_productId", product.getProductId());
+        params.put("p_productName", product.getProductName());
+        params.put("p_productDescription", product.getProductDescription());
+        params.put("p_productPrice", product.getProductPrice());
+        params.put("p_stockQuantity", product.getStockQuantity());
         params.put("p_category", product.getCategory());
         updateProductCall.execute(params);
     }
 
     public void deleteProduct(String productId) {
-        deleteProductCall.execute(Collections.singletonMap("p_product_id", productId));
+        deleteProductCall.execute(Collections.singletonMap("p_productId", productId));
     }
 }

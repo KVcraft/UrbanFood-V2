@@ -1,31 +1,25 @@
 package com.urban_food.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 public class Product {
     private String productId;
-    private String name;
-    private String description;
-    private BigDecimal price;
-    private int stockQty;
+    private String productName;
+    private String productDescription;
+    private BigDecimal productPrice;
+    private int stockQuantity;
     private String category;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
     public Product() {
     }
 
-    public Product(String productId, String name, String description, BigDecimal price, int stockQty, String category,
-                   LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Product(String productId, String productName, String productDescription, BigDecimal productPrice, int stockQuantity, String category) {
         this.productId = productId;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.stockQty = stockQty;
+        this.productName = productName;
+        this.productDescription = productDescription;
+        this.productPrice = productPrice;
+        this.stockQuantity = stockQuantity;
         this.category = category;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public String getProductId() {
@@ -36,36 +30,36 @@ public class Product {
         this.productId = productId;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getProductDescription() {
+        return productDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal getProductPrice() {
+        return productPrice;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setProductPrice(BigDecimal productPrice) {
+        this.productPrice = productPrice;
     }
 
-    public int getStockQty() {
-        return stockQty;
+    public int getStockQuantity() {
+        return stockQuantity;
     }
 
-    public void setStockQty(int stockQty) {
-        this.stockQty = stockQty;
+    public void setStockQuantity(int stockQuantity) {
+        this.stockQuantity = stockQuantity;
     }
 
     public String getCategory() {
@@ -74,21 +68,5 @@ public class Product {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }
