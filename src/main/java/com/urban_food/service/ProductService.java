@@ -30,6 +30,7 @@ public class ProductService {
         createProductCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("CREATE_PRODUCT_PROC")
                 .declareParameters(
+                        new SqlParameter("p_productId", Types.VARCHAR),
                         new SqlParameter("p_productName", Types.VARCHAR),
                         new SqlParameter("p_productDescription", Types.VARCHAR),
                         new SqlParameter("p_productPrice", Types.NUMERIC),
@@ -75,6 +76,7 @@ public class ProductService {
 
     public void createProduct(Product product) {
         Map<String, Object> params = new HashMap<>();
+        params.put("p_productId", product.getProductId()); // now required
         params.put("p_productName", product.getProductName());
         params.put("p_productDescription", product.getProductDescription());
         params.put("p_productPrice", product.getProductPrice());
