@@ -4,9 +4,7 @@ import com.urban_food.entity.Customer;
 import com.urban_food.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,4 +19,25 @@ public class CustomerController {
     public List<Customer> getAllCustomers() {
         return customerService.getAllCustomers();
     }
+    @PostMapping
+    public void addCustomer(@RequestBody Customer customer) {
+        customerService.addCustomer(customer);
+    }
+
+    @PutMapping
+    public void updateCustomer(@RequestBody Customer customer) {
+        customerService.updateCustomer(customer);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteCustomer(@PathVariable("id") String id) {
+        customerService.deleteCustomer(id);
+    }
+    @GetMapping("/search")
+    public List<Customer> searchCustomers(@RequestParam("keyword") String keyword) {
+        return customerService.searchCustomers(keyword);
+    }
+
+
+
 }
