@@ -4,8 +4,8 @@ import com.urban_food.entity.Order;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Service;
 
@@ -79,6 +79,7 @@ public class OrderService {
 
     public void createOrder(Order order) {
         Map<String, Object> params = new HashMap<>();
+        params.put("p_orderId", order.getOrderId());  // Added orderId here
         params.put("p_productId", order.getProductId());
         params.put("p_quantity", order.getQuantity());
         params.put("p_totalAmount", order.getTotalAmount());

@@ -55,7 +55,6 @@ public class OrderController {
         double total = orderService.getTotalSales(startDate, endDate);
         return ResponseEntity.ok(total);
     }
-    //http://localhost:8080/urban-food/orders/sales?startDate=2025-04-01&endDate=2025-04-30
 
     @GetMapping("/top-products")
     public ResponseEntity<List<Map<String, Object>>> getTopProducts() {
