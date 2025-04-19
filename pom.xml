@@ -12,7 +12,7 @@
 	<artifactId>urban-food</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>urban-food</name>
-	<description>Urban food managemtn system</description>
+	<description>Urban food management system</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -41,6 +41,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>5.0.0-M1</version>
 		</dependency>
 
 		<dependency>
