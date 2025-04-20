@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -44,7 +45,9 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password) {
-        return adminService.loginAdmin(username, password);
+    public String login(@RequestBody Map<String, String> body) {
+        String adminUsername = body.get("adminUsername");
+        String adminPassword = body.get("adminPassword");
+        return adminService.loginAdmin(adminUsername, adminPassword);
     }
 }

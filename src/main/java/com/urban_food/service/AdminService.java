@@ -92,13 +92,14 @@ public class AdminService {
     }
 
     public void deleteAdmin(String adminID) {
+
         deleteAdminCall.execute(Collections.singletonMap("p_adminID", adminID));
     }
 
-    public String loginAdmin(String username, String password) {
+    public String loginAdmin(String adminUsername, String adminPassword) {
         Map<String, Object> result = loginAdminCall.execute(Map.of(
-                "p_username", username,
-                "p_password", password
+                "p_username", adminUsername,
+                "p_password", adminPassword
         ));
         return (String) result.get("p_result");
     }
