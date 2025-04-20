@@ -3,10 +3,10 @@ package com.urban_food.controller;
 import com.urban_food.entity.Admin;
 import com.urban_food.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -45,9 +45,8 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Map<String, String> body) {
-        String adminUsername = body.get("adminUsername");
-        String adminPassword = body.get("adminPassword");
-        return adminService.loginAdmin(adminUsername, adminPassword);
+    public ResponseEntity<String> loginAdmin(@RequestBody Admin admin) {
+        String result = adminService.loginAdmin(admin.getAdminUsername(), admin.getAdminPassword());
+        return ResponseEntity.ok(result); // Return just the result string
     }
 }
