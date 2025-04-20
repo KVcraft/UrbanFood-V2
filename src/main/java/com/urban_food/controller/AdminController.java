@@ -3,6 +3,7 @@ package com.urban_food.controller;
 import com.urban_food.entity.Admin;
 import com.urban_food.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,7 +45,8 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password) {
-        return adminService.loginAdmin(username, password);
+    public ResponseEntity<String> loginAdmin(@RequestBody Admin admin) {
+        String result = adminService.loginAdmin(admin.getAdminUsername(), admin.getAdminPassword());
+        return ResponseEntity.ok(result); // Return just the result string
     }
 }
