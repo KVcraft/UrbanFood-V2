@@ -86,5 +86,25 @@ public class CustomerService {
         Map<String, Object> result = searchCall.execute(Map.of("p_keyword", keyword));
         return (List<Customer>) result.get("c_cursor");
     }
+    public boolean login(String username, String password) {
+        SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
+                .withCatalogName("customer_pkg") // your package name
+                .withProcedureName("login_customer")
+                .declareParameters(
+                        new SqlParameter("p_username", Types.VARCHAR),
+                        new SqlParameter("p_password", Types.VARCHAR),
+                        new SqlOutParameter("p_result", Types.INTEGER)
+                );
+
+        Map<String, Object> result = simpleJdbcCall.execute(Map.of(
+                "p_username", username,
+                "p_password", password
+        ));
+
+        Integer loginResult = (Integer) result.get("p_result");
+
+        return loginResult != null && loginResult == 1;
+    }
+
 
 }
