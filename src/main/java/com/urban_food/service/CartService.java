@@ -20,6 +20,7 @@ public class CartService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    // SimpleJdbcCall instances for different stored procedures
     private SimpleJdbcCall addToCartCall;
     private SimpleJdbcCall getAllCartsCall;
     private SimpleJdbcCall getCartByIdCall;
@@ -27,7 +28,7 @@ public class CartService {
     private SimpleJdbcCall deleteCartCall;
     private SimpleJdbcCall checkoutCartCall;
 
-
+    // Initialize all SimpleJdbcCall instances after bean construction
     @PostConstruct
     public void init() {
         // Initialize the SimpleJdbcCall for Add to Cart Procedure
@@ -40,22 +41,26 @@ public class CartService {
                         new SqlParameter("p_quantity", Types.INTEGER),
                         new SqlParameter("p_totalPrice", Types.NUMERIC)
                 );
+
+        // Initialize call for checking out a cart
         checkoutCartCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("CHECKOUT_CART_PROC")
                 .declareParameters(
                         new SqlParameter("p_cartID", Types.VARCHAR)
                 );
 
-        // Other procedure initializations
+        // Initialize call for getting all cart items
         getAllCartsCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("GET_ALL_CARTS_PROC")
                 .returningResultSet("o_cursor", (rs, rowNum) -> mapCart(rs));
 
+        // Initialize call for getting cart item by ID
         getCartByIdCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("GET_CART_BY_ID_PROC")
                 .declareParameters(new SqlParameter("p_cartId", Types.VARCHAR))
                 .returningResultSet("o_cursor", (rs, rowNum) -> mapCart(rs));
 
+        // Initialize call for updating a cart item
         updateCartCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("UPDATE_CART_PROC")
                 .declareParameters(
@@ -70,6 +75,7 @@ public class CartService {
                 .declareParameters(new SqlParameter("p_cartId", Types.VARCHAR));
     }
 
+    // Helper method to map a ResultSet row to a Cart object
     private Cart mapCart(ResultSet rs) throws SQLException {
         Cart cart = new Cart();
         cart.setCartId(rs.getString("cartId"));
@@ -80,15 +86,16 @@ public class CartService {
         return cart;
     }
 
+    // Service method to add a cart item
     public void addToCart(Cart cart) {
-        // Example logic for adding the cart item
+
         Map<String, Object> params = new HashMap<>();
         params.put("p_cartId", cart.getCartId());
         params.put("p_customerId", cart.getCustomerId());
         params.put("p_productId", cart.getProductId());
         params.put("p_quantity", cart.getQuantity());
 
-        // Assuming totalPrice is calculated before calling this method
+        // Calculate total price for the cart item
         BigDecimal totalPrice = calculateTotalPrice(cart.getProductId(), cart.getQuantity());
         params.put("p_totalPrice", totalPrice);
 
@@ -96,12 +103,14 @@ public class CartService {
         addToCartCall.execute(params);
     }
 
+    // Calculate the total price by multiplying product price with quantity
     private BigDecimal calculateTotalPrice(String productId, int quantity) {
         // Logic to get price of product and calculate totalPrice
         BigDecimal pricePerUnit = getProductPrice(productId); // Fetch price from DB or service
         return pricePerUnit.multiply(BigDecimal.valueOf(quantity));
     }
 
+    // Get the price of a product from the Product table using productId
     private BigDecimal getProductPrice(String productId) {
         // Logic to get the product price from the database
         // Example: Fetch price from the Product table using the productId
@@ -134,10 +143,12 @@ public class CartService {
         deleteCartCall.execute(Collections.singletonMap("p_cartId", cartId));
     }
 
+    // Service method to checkout (complete purchase) for a cart
     public void checkoutCart(String cartId) {
         Map<String, Object> params = new HashMap<>();
         params.put("p_cartID", cartId);
 
+        // Execute stored procedure to checkout cart
         checkoutCartCall.execute(params);
     }
 

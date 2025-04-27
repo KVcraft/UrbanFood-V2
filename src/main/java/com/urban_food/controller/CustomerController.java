@@ -37,6 +37,11 @@ public class CustomerController {
     public List<Customer> searchCustomers(@RequestParam("keyword") String keyword) {
         return customerService.searchCustomers(keyword);
     }
+    @PostMapping("/login")
+    public boolean login(@RequestBody Customer customer) {
+        return customerService.login(customer.getCustomerUsername(), customer.getCustomerPassword());
+    }
+
 
 
 
